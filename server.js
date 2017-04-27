@@ -57,7 +57,7 @@ app.post('/addingKoala', function(req, res) {
     data.transfer,
     data.notes
   ];
-
+  console.log(req);
   var insert = 'INSERT INTO koala (name, sex, age, ready_for_transfer, notes) VALUES ($1, $2, $3, $4, $5)';
 
   pool.connect(function(err, connection, done){
@@ -72,3 +72,25 @@ app.post('/addingKoala', function(req, res) {
     }
   });
 }); // end of app.post
+
+app.delete('/remove',function(req,res){
+  console.log('in /remove delete');
+  //connect to db
+  pool.connect(function(err, connection, done){
+    //check for error
+    if(err){
+      console.log(err);
+      res.send(400);
+    }
+    //send query to db to delete this koala
+    else{
+      connection.query('DELETE from koala where id=' + req.body.id );
+      //send response to client
+      //close connection
+      done();
+      res.send(200);
+    }
+  });
+
+
+});
